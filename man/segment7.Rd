@@ -13,12 +13,27 @@ segment7(
   height = 320
 )
 }
+\arguments{
+\item{value}{A single digit (0-9) to be displayed. Defaults to 8.}
+
+\item{dp}{A boolean indicating whether to display the decimal point. Defaults to FALSE}
+
+\item{color}{The color of the active segments. Specifieds as a hex code. Defaults to "#00FF00".}
+
+\item{stroke}{The color of the stroke around the segments. Specified as a hex code. Defaults to "#004D00".}
+
+\item{background}{The background color of the SVG. Specified as a hex code. Defaults to "#000000".}
+
+\item{height}{The height of the SVG in pixels. Defaults to 320.}
+}
 \value{
-A character vector
+A character string containing the SVG representation of the seven-segment display.
 }
 \description{
 A that returns a seven-segment display as an SVG
 }
 \examples{
-segment7(8)
+segment7(value = 3, dp = TRUE,
+    color = "#FF0000", stroke = "#000000", background = "#FFFFFF",
+    height = 200)
 }
