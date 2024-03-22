@@ -2,11 +2,18 @@
 #'
 #' A that returns a seven-segment display as an SVG
 #'
-#' @return A character vector
-#' @export
-#'
+#' @param value A single digit (0-9) to be displayed. Defaults to 8.
+#' @param dp A boolean indicating whether to display the decimal point. Defaults to FALSE
+#' @param color The color of the active segments. Specifieds as a hex code. Defaults to "#00FF00".
+#' @param stroke The color of the stroke around the segments. Specified as a hex code. Defaults to "#004D00".
+#' @param background The background color of the SVG. Specified as a hex code. Defaults to "#000000".
+#' @param height The height of the SVG in pixels. Defaults to 320.
+#' @return A character string containing the SVG representation of the seven-segment display.
 #' @examples
-#' segment7(8)
+#' segment7(value = 3, dp = TRUE,
+#'     color = "#FF0000", stroke = "#000000", background = "#FFFFFF",
+#'     height = 200)
+#' @export
 
 segment7 <- function(value = 8,
                      dp = FALSE,
@@ -16,7 +23,14 @@ segment7 <- function(value = 8,
                      height = 320){
   all_segments <- letters[1:8]
 
-  width <- height/(1+2/3)
+  # Defines width based on height to keep aspect ratio
+  width <- height*(3/5)
+
+  # segments can be defined simpler
+  segments <- c("abcdef", "bc", "abdeg", "abcdg", "bcfg", "acdfg",
+                "acdefg", "abc", "abcdefg","abcdfg")
+
+  # but not yet
 
   segments <- list(
     "0" = c("a", "b", "c", "d", "e", "f"),
@@ -32,7 +46,7 @@ segment7 <- function(value = 8,
   )
 
   # validation of input
-  if(!(as.character(value) %in% names(segments))){
+  if(!(value %in% 0:9)){
     stop("The provided value '", value, "' is not valid. Please choose an integer between 0 and 9.", call. = FALSE)
   }
   if(!is.logical(dp)){
