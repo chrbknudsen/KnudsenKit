@@ -14,7 +14,7 @@ segment7 <- function(value = 8,
                      stroke = "#004D00",
                      background = "#000000",
                      height = 320){
-  all_segments <- c("a", "b", "c", "d", "e", "f", "g")
+  all_segments <- letters[1:8]
 
   width <- height/(1+2/3)
 
@@ -31,30 +31,45 @@ segment7 <- function(value = 8,
     "9" = c("a", "b", "c", "d", "f", "g")
   )
 
+  # validation of input
   if(!(as.character(value) %in% names(segments))){
-    return(NA)
+    stop("The provided value '", value, "' is not valid. Please choose an integer between 0 and 9.", call. = FALSE)
+  }
+  if(!is.logical(dp)){
+    stop("Parameter 'dp' should be TRUE or FALSE.", call. = FALSE)
+  }
+  validate_color <- function(color) {
+    if(!grepl("^#[0-9A-Fa-f]{6}$", color)){
+      stop("Color '", color, "' is not a valid hex color code. Please provide a hex code in the format #RRGGBB.", call. = FALSE)
+    }
+  }
+  validate_color(color)
+  validate_color(stroke)
+  validate_color(background)
+  if(!is.numeric(height) || height <= 0){
+    stop("Parameter 'height' should be a positive number.", call. = FALSE)
   }
 
 
   segments_on <- list(
-    a = paste('<polygon id="a" fill="', color, '" stroke = "', stroke,'" points="2, 2  3, 1  9, 1  10, 2  9, 3  3, 3"/>', sep  = ""),
-    b = paste('<polygon id="b" fill="', color, '" stroke = "', stroke,'" points="10, 2 11, 3 11, 9  10, 10  9, 9  9, 3"/>', sep  = ""),
-    c = paste('<polygon id="c" fill="', color, '" stroke = "', stroke,'" points="10, 10 11,11 11,17  10,18  9,17  9,11"/>', sep  = ""),
-    d = paste('<polygon id="d" fill="', color, '" stroke = "', stroke,'" points="10,18  9,19  3,19  2,18  3,17  9,17"/>', sep = ""),
-    e = paste('<polygon id="e" fill="', color, '" stroke = "', stroke,'" points="2,18  1,17  1,11  2, 10  3,11  3,17"/>', sep = ""),
-    f = paste('<polygon id="f" fill="', color, '" stroke = "', stroke,'" points="2, 10  1, 9  1, 3  2, 2  3, 3  3, 9"/>', sep = ""),
-    g = paste('<polygon id="g" fill="', color, '" stroke = "', stroke,'" points="2, 10  3, 9  9, 9  10, 10  9,11  3,11"/>', sep = "")
+    a = paste0('<polygon id="a" fill="', color, '" stroke = "', stroke,'" points="2, 2  3, 1  9, 1  10, 2  9, 3  3, 3"/>'),
+    b = paste0('<polygon id="b" fill="', color, '" stroke = "', stroke,'" points="10, 2 11, 3 11, 9  10, 10  9, 9  9, 3"/>'),
+    c = paste0('<polygon id="c" fill="', color, '" stroke = "', stroke,'" points="10, 10 11,11 11,17  10,18  9,17  9,11"/>'),
+    d = paste0('<polygon id="d" fill="', color, '" stroke = "', stroke,'" points="10,18  9,19  3,19  2,18  3,17  9,17"/>'),
+    e = paste0('<polygon id="e" fill="', color, '" stroke = "', stroke,'" points="2,18  1,17  1,11  2, 10  3,11  3,17"/>'),
+    f = paste0('<polygon id="f" fill="', color, '" stroke = "', stroke,'" points="2, 10  1, 9  1, 3  2, 2  3, 3  3, 9"/>'),
+    g = paste0('<polygon id="g" fill="', color, '" stroke = "', stroke,'" points="2, 10  3, 9  9, 9  10, 10  9,11  3,11"/>')
   )
 
 
   segments_off <- list(
-    a = paste('<polygon id="a" fill="', background, '" stroke = "', stroke,'" points="2, 2  3, 1  9, 1  10, 2  9, 3  3, 3"/>', sep = ""),
-    b = paste('<polygon id="b" fill="', background, '" stroke = "', stroke,'" points="10, 2 11, 3 11, 9  10, 10  9, 9  9, 3"/>', sep  = ""),
-    c = paste('<polygon id="c" fill="', background, '" stroke = "', stroke,'" points="10, 10 11,11 11,17  10,18  9,17  9,11"/>', sep = ""),
-    d = paste('<polygon id="d" fill="', background, '" stroke = "', stroke,'" points="10,18  9,19  3,19  2,18  3,17  9,17"/>', sep = ""),
-    e = paste('<polygon id="e" fill="', background, '" stroke = "', stroke,'" points="2,18  1,17  1,11  2, 10  3,11  3,17"/>', sep = ""),
-    f = paste('<polygon id="f" fill="', background, '" stroke = "', stroke,'" points="2, 10  1, 9  1, 3  2, 2  3, 3  3, 9"/>', sep = ""),
-    g = paste('<polygon id="g" fill="', background, '" stroke = "', stroke,'" points="2, 10  3, 9  9, 9  10, 10  9,11  3,11"/>', sep = "")
+    a = paste0('<polygon id="a" fill="', background, '" stroke = "', stroke,'" points="2, 2  3, 1  9, 1  10, 2  9, 3  3, 3"/>'),
+    b = paste0('<polygon id="b" fill="', background, '" stroke = "', stroke,'" points="10, 2 11, 3 11, 9  10, 10  9, 9  9, 3"/>'),
+    c = paste0('<polygon id="c" fill="', background, '" stroke = "', stroke,'" points="10, 10 11,11 11,17  10,18  9,17  9,11"/>'),
+    d = paste0('<polygon id="d" fill="', background, '" stroke = "', stroke,'" points="10,18  9,19  3,19  2,18  3,17  9,17"/>'),
+    e = paste0('<polygon id="e" fill="', background, '" stroke = "', stroke,'" points="2,18  1,17  1,11  2, 10  3,11  3,17"/>'),
+    f = paste0('<polygon id="f" fill="', background, '" stroke = "', stroke,'" points="2, 10  1, 9  1, 3  2, 2  3, 3  3, 9"/>'),
+    g = paste0('<polygon id="g" fill="', background, '" stroke = "', stroke,'" points="2, 10  3, 9  9, 9  10, 10  9,11  3,11"/>')
   )
 
   active_segments <- segments[[as.character(value)]]
